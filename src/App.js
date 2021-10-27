@@ -15,14 +15,18 @@ class App extends React.Component {
   }
 
   addToCart = (product) => {
-    // const item = {
-    //   product,
-    //   quant: 1,
-    // }
-
     this.setState((prev) => ({
       cartList: [...prev.cartList, product],
     }));
+  };
+
+  removeItem = ({ id }) => {
+    const { cartList } = this.state;
+    const newArr = cartList.filter((item) => item.id !== id);
+
+    this.setState({
+      cartList: newArr,
+    });
   };
 
   render() {
@@ -33,7 +37,7 @@ class App extends React.Component {
           <Route exact path="/" render={ () => <Busca cartFunc={ this.addToCart } /> } />
           <Route
             path="/shopping-cart"
-            render={ () => <ShoppingCart cart={ cartList } /> }
+            render={ () => <ShoppingCart remove={ this.removeItem } cart={ cartList } /> }
           />
           <Route
             path="/product-details/:id"

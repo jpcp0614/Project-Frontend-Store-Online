@@ -2,9 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class CartItem extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      quant: 1,
+    };
+  }
+
+  incrementItem = () => {
+    this.setState((prev) => ({
+      quant: prev.quant + 1,
+    }));
+  }
+
+  decrementItem = () => {
+    const { quant } = this.state;
+
+    if (quant > 1) {
+      this.setState((prev) => ({
+        quant: prev.quant - 1,
+      }));
+    }
+  }
+
   render() {
-    const { product } = this.props;
+    const { product, remove } = this.props;
     const { title, thumbnail, price } = product;
+    const { quant } = this.state;
 
     return (
       <div>
@@ -16,8 +41,25 @@ class CartItem extends React.Component {
           { price }
         </p>
         <p data-testid="shopping-cart-product-quantity">
-          1
+          { `Quantidade: ${quant}` }
         </p>
+        <button
+          type="button"
+          data-testid="product-increase-quantity"
+          onClick={ this.incrementItem }
+        >
+          +
+        </button>
+        <button
+          type="button"
+          data-testid="product-decrease-quantity"
+          onClick={ this.decrementItem }
+        >
+          -
+        </button>
+        <button type="button" onClick={ () => remove(product) }>
+          X
+        </button>
       </div>
     );
   }
@@ -29,6 +71,7 @@ CartItem.propTypes = {
     thumbnail: PropTypes.string,
     price: PropTypes.number,
   }).isRequired,
+  remove: PropTypes.func.isRequired,
 };
 
 export default CartItem;
