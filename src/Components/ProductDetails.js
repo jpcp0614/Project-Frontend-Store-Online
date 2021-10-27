@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class ProductDetails extends React.Component {
   addProduct = (id, title) => {
-    const { product, cartFunc } = this.props;
+    const { location:
+      { state: { product } }, cartFunc } = this.props;
     cartFunc(product);
     let cart = [];
     const newProduct = {
@@ -44,6 +46,13 @@ class ProductDetails extends React.Component {
         >
           Adicionar ao carrinho
         </button>
+        <Link
+          to="/shopping-cart"
+          data-testid="shopping-cart-button"
+        >
+          {' '}
+          Ícone para carrinho de compras
+        </Link>
       </div>
     );
   }
@@ -56,8 +65,10 @@ ProductDetails.propTypes = {
       thumbnail: PropTypes.string,
       price: PropTypes.number,
       attributes: PropTypes.arrayOf(PropTypes.object),
+      product: PropTypes.shape().isRequired,
     }).isRequired,
   }).isRequired,
+  cartFunc: PropTypes.func.isRequired,
 };
 
 export default ProductDetails;

@@ -18,6 +18,7 @@ class ProductCard extends React.Component {
               price,
               id,
               attributes,
+              product,
             },
           } }
           data-testid="product-detail-link"
