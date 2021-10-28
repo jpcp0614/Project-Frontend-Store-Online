@@ -44,6 +44,9 @@ class Busca extends React.Component {
       products: apiReturn.results,
       loaded: true,
     });
+    const { getProducts } = this.props;
+    const { products } = this.state;
+    getProducts(products);
   }
 
   async fetchCategoriesAndSetOnState() {
@@ -54,8 +57,8 @@ class Busca extends React.Component {
   }
 
   render() {
-    const { input, categoriesList, products, loaded } = this.state;
-    const { cartFunc } = this.props;
+    const { input, categoriesList, loaded } = this.state;
+    const { cartFunc, products } = this.props;
     return (
       <div className="container">
         <div>
@@ -68,18 +71,18 @@ class Busca extends React.Component {
               type="text"
               name="input"
               id="input"
-              value={input}
-              onChange={this.handleChange}
+              value={ input }
+              onChange={ this.handleChange }
             />
           </label>
           <button
             type="button"
             data-testid="query-button"
-            onClick={this.handleSubmit}
+            onClick={ this.handleSubmit }
           >
             Buscar
           </button>
-          <Categorias lista={categoriesList} handleClick={this.handleCategoryClick} />
+          <Categorias lista={ categoriesList } handleClick={ this.handleCategoryClick } />
 
           <Link
             to="/shopping-cart"
@@ -90,14 +93,14 @@ class Busca extends React.Component {
           </Link>
         </div>
         <div>
-          {loaded && <h2>Resultados:</h2>}
-          {products.map((product) => (
+          { loaded && <h2>Resultados:</h2> }
+          { products.map((product) => (
             <ProductCard
-              cartFunc={cartFunc}
-              product={product}
-              key={product.id}
+              cartFunc={ cartFunc }
+              product={ product }
+              key={ product.id }
             />
-          ))}
+          )) }
         </div>
       </div>
     );
@@ -106,6 +109,8 @@ class Busca extends React.Component {
 
 Busca.propTypes = {
   cartFunc: PropTypes.func.isRequired,
+  getProducts: PropTypes.func.isRequired,
+  products: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Busca;

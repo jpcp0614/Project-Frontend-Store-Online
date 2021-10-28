@@ -10,6 +10,7 @@ class App extends React.Component {
 
     this.state = {
       cartList: [],
+      products: [],
     };
   }
 
@@ -27,6 +28,32 @@ class App extends React.Component {
         cartList: [...prev.cartList, product],
       }));
     }
+  };
+
+  getProducts = (products) => {
+    this.setState({ products });
+  }
+
+  setRateOnState = (event, product) => {
+    const { products } = this.state;
+    const initiatedProducts = products.map((item) => {
+      if (!item.rateAndComment) {
+        item.rateAndComment = {
+          rate: '',
+          comment: '',
+        };
+      } else if (item.rateAndComment && item.id === product.id) {
+        if (event.target.type === 'radio') {
+          item.rateAndComment.rate = event.target.value;
+        } else if (event.target.type === 'textarea') {
+          item.rateAndComment.comment = event.target.value;
+        }
+      }
+      return item;
+    });
+    this.setState({
+      products: initiatedProducts,
+    });
   };
 
   increaseQuantity = (product) => {
@@ -64,11 +91,12 @@ class App extends React.Component {
 
     this.setState({
       cartList: newArr,
+      products: [],
     });
   };
 
   render() {
-    const { cartList } = this.state;
+    const { cartList, products } = this.state;
     return (
       <BrowserRouter>
         <Switch>
@@ -78,6 +106,8 @@ class App extends React.Component {
             render={ () => (
               <Busca
                 cartFunc={ this.addToCart }
+                getProducts={ this.getProducts }
+                products={ products }
               />) }
           />
           <Route
@@ -94,6 +124,7 @@ class App extends React.Component {
             render={ (routeProps) => (<ProductDetails
               { ...routeProps }
               cartFunc={ this.addToCart }
+              rateFunc={ this.setRateOnState }
             />) }
           />
         </Switch>
