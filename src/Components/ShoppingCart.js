@@ -34,9 +34,11 @@ class ShoppingCart extends React.Component {
     return (
       <div>
         { this.checkIfCartIsEmpty() ? emptyMessage : cartMap }
-        { `total = ${totalPrice}` }
+        { `Valor total = R$ ${totalPrice.toFixed(2)}` }
 
-        <Link to="/">Voltar</Link>
+        <p>
+          <Link to="/">Voltar</Link>
+        </p>
       </div>
     );
   }

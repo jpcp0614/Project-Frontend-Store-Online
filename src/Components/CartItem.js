@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 class CartItem extends React.Component {
   render() {
     const { product, remove, funcToIncrease, funcToDecrease } = this.props;
-    const { title, thumbnail, price } = product;
+    const { title, thumbnail, price, quantidadeNoCarrinho } = product;
 
     return (
       <div>
@@ -29,6 +29,7 @@ class CartItem extends React.Component {
           type="button"
           data-testid="product-decrease-quantity"
           onClick={ () => funcToDecrease(product) }
+          disabled={ quantidadeNoCarrinho === 1 }
         >
           -
         </button>
