@@ -15,9 +15,48 @@ class App extends React.Component {
   }
 
   addToCart = (product) => {
-    this.setState((prev) => ({
-      cartList: [...prev.cartList, product],
-    }));
+    const { cartList } = this.state;
+    const productIsAlreadyOnCart = cartList.find((cartItem) => (
+      cartItem.id === product.id));
+    const indexOfProduct = cartList.indexOf(productIsAlreadyOnCart);
+
+    if (indexOfProduct >= 0) {
+      this.increaseQuantity(product);
+    } else {
+      product.quantidadeNoCarrinho = 1;
+      this.setState((prev) => ({
+        cartList: [...prev.cartList, product],
+      }));
+    }
+  };
+
+  increaseQuantity = (product) => {
+    const { cartList } = this.state;
+    const updatedCartList = cartList.map((item) => {
+      const itemToUpdate = item;
+      if (itemToUpdate.id === product.id) {
+        itemToUpdate.quantidadeNoCarrinho += 1;
+      }
+      return itemToUpdate;
+    });
+    this.setState({
+      cartList: updatedCartList,
+    });
+  };
+
+  decreaseQuantity = (product) => {
+    const { cartList } = this.state;
+    const updatedCartList = cartList.map((item) => {
+      const itemToUpdate = item;
+      if (itemToUpdate.id === product.id
+        && itemToUpdate.quantidadeNoCarrinho > 1) {
+        itemToUpdate.quantidadeNoCarrinho -= 1;
+      }
+      return itemToUpdate;
+    });
+    this.setState({
+      cartList: updatedCartList,
+    });
   };
 
   removeItem = ({ id }) => {
@@ -34,10 +73,22 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route exact path="/" render={ () => <Busca cartFunc={ this.addToCart } /> } />
+          <Route
+            exact
+            path="/"
+            render={ () => (
+              <Busca
+                cartFunc={ this.addToCart }
+              />) }
+          />
           <Route
             path="/shopping-cart"
-            render={ () => <ShoppingCart remove={ this.removeItem } cart={ cartList } /> }
+            render={ () => (<ShoppingCart
+              remove={ this.removeItem }
+              cart={ cartList }
+              funcToIncrease={ this.increaseQuantity }
+              funcToDecrease={ this.decreaseQuantity }
+            />) }
           />
           <Route
             path="/product-details/:id"

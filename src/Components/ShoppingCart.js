@@ -14,15 +14,22 @@ class ShoppingCart extends React.Component {
   };
 
   render() {
-    const { cart, remove } = this.props;
+    const { cart, remove, funcToIncrease, funcToDecrease } = this.props;
     const emptyMessage = (
       <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
     );
     const cartMap = cart.map((item) => (
-      <CartItem remove={ remove } key={ item.id } product={ item } />
+      <CartItem
+        remove={ remove }
+        key={ item.id }
+        product={ item }
+        funcToIncrease={ funcToIncrease }
+        funcToDecrease={ funcToDecrease }
+      />
     ));
 
-    const totalPrice = cart.reduce((acc, product) => product.price + acc, 0);
+    const totalPrice = cart.reduce((acc, product) => (
+      product.price * product.quantidadeNoCarrinho) + acc, 0);
 
     return (
       <div>
@@ -38,6 +45,8 @@ class ShoppingCart extends React.Component {
 ShoppingCart.propTypes = {
   cart: PropTypes.arrayOf(PropTypes.object).isRequired,
   remove: PropTypes.func.isRequired,
+  funcToIncrease: PropTypes.func.isRequired,
+  funcToDecrease: PropTypes.func.isRequired,
 };
 
 export default ShoppingCart;
