@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Busca from './Components/Busca';
+import Checkout from './Components/Checkout';
 import ProductDetails from './Components/ProductDetails';
 import ShoppingCart from './Components/ShoppingCart';
 
@@ -125,6 +126,12 @@ class App extends React.Component {
               { ...routeProps }
               cartFunc={ this.addToCart }
               rateFunc={ this.setRateOnState }
+            />) }
+          />
+          <Route
+            path="/checkout"
+            render={ () => (<Checkout
+              cartList={ cartList }
             />) }
           />
         </Switch>
