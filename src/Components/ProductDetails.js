@@ -3,6 +3,16 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 class ProductDetails extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const { location:
+      { state: { product } }, rateFunc } = this.props;
+    rateFunc({ target: {
+      type: '',
+    } }, product);
+  }
+
   addProduct = (id, title) => {
     const { location:
       { state: { product } }, cartFunc } = this.props;
@@ -22,7 +32,9 @@ class ProductDetails extends React.Component {
 
   render() {
     const { location:
-       { state: { title, thumbnail, price, attributes, id } } } = this.props;
+      { state: { title, thumbnail, price, attributes, id,
+        product } }, rateFunc } = this.props;
+    const { rateAndComment } = product;
 
     return (
       <div data-testid="product-detail-name">
@@ -33,12 +45,12 @@ class ProductDetails extends React.Component {
           <ul>
             {attributes.map((attribute) => (
               <li key={ attribute.id }>
-                { `${attribute.name}: ${attribute.value_name}` }
+                {`${attribute.name}: ${attribute.value_name}`}
               </li>
             ))}
           </ul>
         </div>
-        <p>{ `R$${price.toFixed(2)}` }</p>
+        <p>{`R$${price.toFixed(2)}`}</p>
         <button
           data-testid="product-detail-add-to-cart"
           type="button"
@@ -53,10 +65,80 @@ class ProductDetails extends React.Component {
           {' '}
           Ícone para carrinho de compras
         </Link>
+        <form>
+          <span>Nota:</span>
+          <label htmlFor="rating1">
+            1
+            <input
+              type="radio"
+              name="rating"
+              id="rating1"
+              value="1"
+              checked={ rateAndComment.rate === '1' }
+              onChange={ (event) => rateFunc(event, product) }
+            />
+          </label>
+          <label htmlFor="rating2">
+            2
+            <input
+              type="radio"
+              name="rating"
+              id="rating2"
+              value="2"
+              checked={ rateAndComment.rate === '2' }
+              onChange={ (event) => rateFunc(event, product) }
+            />
+          </label>
+          <label htmlFor="rating3">
+            3
+            <input
+              type="radio"
+              name="rating"
+              id="rating3"
+              value="3"
+              checked={ rateAndComment.rate === '3' }
+              onChange={ (event) => rateFunc(event, product) }
+            />
+          </label>
+          <label htmlFor="rating4">
+            4
+            <input
+              type="radio"
+              name="rating"
+              id="rating4"
+              value="4"
+              checked={ rateAndComment.rate === '4' }
+              onChange={ (event) => rateFunc(event, product) }
+            />
+          </label>
+          <label htmlFor="rating5">
+            5
+            <input
+              type="radio"
+              name="rating"
+              id="rating5"
+              value="5"
+              checked={ rateAndComment.rate === '5' }
+              onChange={ (event) => rateFunc(event, product) }
+            />
+          </label>
+
+          <label htmlFor="comment">
+            <textarea
+              data-testid="product-detail-evaluation"
+              style={ { resize: 'vertical' } }
+              type="text"
+              id="comment"
+              value={ rateAndComment.comment }
+              onChange={ (event) => rateFunc(event, product) }
+            />
+          </label>
+        </form>
       </div>
     );
   }
 }
+
 ProductDetails.propTypes = {
   location: PropTypes.shape({
     state: PropTypes.shape({
@@ -69,6 +151,7 @@ ProductDetails.propTypes = {
     }).isRequired,
   }).isRequired,
   cartFunc: PropTypes.func.isRequired,
+  rateFunc: PropTypes.func.isRequired,
 };
 
 export default ProductDetails;

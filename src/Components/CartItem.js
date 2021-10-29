@@ -2,34 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class CartItem extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      quant: 1,
-    };
-  }
-
-  incrementItem = () => {
-    this.setState((prev) => ({
-      quant: prev.quant + 1,
-    }));
-  }
-
-  decrementItem = () => {
-    const { quant } = this.state;
-
-    if (quant > 1) {
-      this.setState((prev) => ({
-        quant: prev.quant - 1,
-      }));
-    }
-  }
-
   render() {
-    const { product, remove } = this.props;
-    const { title, thumbnail, price } = product;
-    const { quant } = this.state;
+    const { product, remove, funcToIncrease, funcToDecrease } = this.props;
+    const { title, thumbnail, price, quantidadeNoCarrinho } = product;
 
     return (
       <div>
@@ -41,19 +16,20 @@ class CartItem extends React.Component {
           { price }
         </p>
         <p data-testid="shopping-cart-product-quantity">
-          { `Quantidade: ${quant}` }
+          { `Quantidade: ${product.quantidadeNoCarrinho}` }
         </p>
         <button
           type="button"
           data-testid="product-increase-quantity"
-          onClick={ this.incrementItem }
+          onClick={ () => funcToIncrease(product) }
         >
           +
         </button>
         <button
           type="button"
           data-testid="product-decrease-quantity"
-          onClick={ this.decrementItem }
+          onClick={ () => funcToDecrease(product) }
+          disabled={ quantidadeNoCarrinho === 1 }
         >
           -
         </button>
@@ -70,8 +46,11 @@ CartItem.propTypes = {
     title: PropTypes.string,
     thumbnail: PropTypes.string,
     price: PropTypes.number,
+    quantidadeNoCarrinho: PropTypes.number,
   }).isRequired,
   remove: PropTypes.func.isRequired,
+  funcToIncrease: PropTypes.func.isRequired,
+  funcToDecrease: PropTypes.func.isRequired,
 };
 
 export default CartItem;
