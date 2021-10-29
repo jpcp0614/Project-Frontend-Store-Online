@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+}
+
+img {
+  max-width: 200px;
+  min-width: 100px;
+}
